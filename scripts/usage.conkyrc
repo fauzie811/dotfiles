@@ -36,7 +36,8 @@ conky.config = {
 }
 
 conky.text = [[
-CPU: ${cpu}% | \
-RAM: ${memperc}% | \
+$HOME/scripts/icons/usage.svg
+CPU: ${cpu}% • \
+RAM: ${memperc}% • \
 DISK: ${fs_used_perc}%
 ]]
