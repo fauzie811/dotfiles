@@ -1,0 +1,66 @@
+#openbox themerc edited with obtheme
+border.width: 1
+menu.border.color: #d8d8d8
+menu.items.active.bg: flat solid
+menu.items.active.bg.color: #e0e0e0
+menu.items.active.text.color: #212121
+menu.items.bg: flat solid
+menu.items.bg.color: #ffffff
+menu.items.disabled.text.color: #e0e0e0
+menu.items.text.color: #212121
+menu.separator.color: #e1e1e1
+menu.separator.padding.height: 2
+menu.separator.padding.width: 0
+menu.separator.width: 1
+menu.title.bg: flat solid
+menu.title.bg.color: #e0e0e0
+menu.title.text.color: #212121
+menu.title.text.justify: center
+osd.bg: flat solid
+osd.bg.color: #3b484e
+osd.border.color: #262e32
+osd.hilight.bg: flat solid
+osd.hilight.bg.color: #535e63
+osd.label.bg: flat solid
+osd.label.bg.color: #333e43
+osd.label.text.color: #ffffff
+osd.unhilight.bg: flat solid
+osd.unhilight.bg.color: #000000
+padding.height: 4
+padding.width: 8
+window.active.border.color: #4b5960
+window.active.button.disabled.bg: parentrelative
+window.active.button.disabled.image.color: #4F5D64
+window.active.button.hover.image.color: #ffffff
+window.active.button.pressed.bg: parentrelative
+window.active.button.pressed.image.color: #ffffff
+window.active.button.toggled.hover.image.color: #ffffff
+window.active.button.toggled.unpressed.image.color: #c3c7ca
+window.active.button.unpressed.bg: parentrelative
+window.active.button.unpressed.image.color: #c3c7ca
+window.active.client.color: #62a2d5
+window.active.label.bg: flat solid
+window.active.label.bg.color: #37474f
+window.active.label.text.color: #ffffff
+window.active.title.bg: flat solid
+window.active.title.bg.color: #37474f
+window.active.title.separator.color: #37474F
+window.client.padding.width: 0
+window.handle.width: 0
+window.inactive.button.disabled.bg: parentrelative
+window.inactive.button.disabled.image.color: #4F5D64
+window.inactive.button.hover.image.color: #ffffff
+window.inactive.button.pressed.bg: parentrelative
+window.inactive.button.pressed.image.color: #ffffff
+window.inactive.button.toggled.hover.image.color: #ffffff
+window.inactive.button.toggled.unpressed.image.color: #9ba3a7
+window.inactive.button.unpressed.bg: parentrelative
+window.inactive.button.unpressed.image.color: #9ba3a7
+window.inactive.client.color: #62a2d5
+window.inactive.label.bg: flat solid
+window.inactive.label.bg.color: #37474f
+window.inactive.label.text.color: #9ba3a7
+window.inactive.title.bg: flat solid
+window.inactive.title.bg.color: #37474f
+window.inactive.title.separator.color: #37474F
+window.label.text.justify: left

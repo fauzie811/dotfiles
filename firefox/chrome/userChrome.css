@@ -1,0 +1,394 @@
+/*
+ * Do not remove the @namespace line -- it's required for correct functioning
+ */
+@namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"); /* set default namespace to XUL */
+
+/*:not([sizemode=maximized]) #navigator-toolbox > #TabsToolbar {
+  padding-left: 32px !important;
+}*/
+
+:root {
+  --tab-min-height: 27px !important;
+  --tab-min-width: 62px !important;
+  --url-and-searchbar-background-color: #37474F !important;
+}
+
+#navigator-toolbox {
+  margin-top: -1px;
+}
+#navigator-toolbox::after {
+  content: none !important;
+}
+#navigator-toolbox > toolbar:not(#TabsToolbar):not(#toolbar-menubar), .browserContainer > findbar, #browser-bottombox {
+  background-color: #455A64 !important;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24) !important;
+}
+#TabsToolbar, #navigator-toolbox {
+  background-color: #37474F !important;
+}
+#nav-bar {
+  margin-top: -1px !important;
+  min-height: 44px !important;
+  padding-left: 6px !important;
+  padding-right: 6px !important;
+  --toolbarbutton-inner-padding: 8px;
+  z-index: 10000;
+}
+#urlbar, .searchbar-textbox {
+  border: none !important;
+  box-shadow: none !important;
+}
+#urlbar:not([focused]), .searchbar-textbox:not([focused]) {
+  text-align: center;
+}
+
+#minimize-window-button_nanpuyue_com-browser-action,
+#maximize-window-button_nanpuyue_com-browser-action,
+#close-window-button_nanpuyue_com-browser-action {
+  list-style-image: none !important;
+  padding: 0 !important;
+  opacity: 0.7;
+}
+#minimize-window-button_nanpuyue_com-browser-action:hover,
+#maximize-window-button_nanpuyue_com-browser-action:hover,
+#close-window-button_nanpuyue_com-browser-action:hover {
+  opacity: 1;
+}
+#close-window-button_nanpuyue_com-browser-action {
+  background: transparent url("close.svg") no-repeat center !important;
+}
+:not([sizemode=maximized]) #maximize-window-button_nanpuyue_com-browser-action {
+  background: transparent url("maximize.svg") no-repeat center !important;
+}
+[sizemode=maximized] #maximize-window-button_nanpuyue_com-browser-action {
+  background: transparent url("restore.svg") no-repeat center !important;
+}
+#minimize-window-button_nanpuyue_com-browser-action {
+  background: transparent url("minimize.svg") no-repeat center !important;
+}
+
+#tabbrowser-tabs,
+#tabbrowser-tabs > .tabbrowser-arrowscrollbox{
+  min-height: unset !important;
+}
+.arrowscrollbox-overflow-start-indicator,
+.arrowscrollbox-overflow-end-indicator {
+  background-image: none !important;
+}
+#TabsToolbar { --toolbarbutton-inner-padding: 5px; }
+/*.tabbrowser-tab:not([pinned]) {
+  max-width: 180px !important;
+}*/
+.tab-close-button {
+  width: 16px !important;
+  margin-top: -1px !important;
+  margin-inline-end: -1px !important;
+}
+.tab-content {
+  padding: 0 4px !important;
+}
+.tabbrowser-tab[pinned] .tab-content {
+  padding: 0 8px !important;
+}
+
+toolbarspring {
+  max-width: unset !important;
+}
+
+#PanelUI-button {
+  -moz-box-ordinal-group: 0 !important;
+  border: none !important;
+  margin: 0 13px 0 0 !important;
+}
+#PanelUI-button::after {
+  background-color: rgba(0,0,0,0.12);
+  content: '';
+  position: absolute;
+  width: 1px;
+  height: 100%;
+  left: : 0px;
+  margin-left: 6px;
+}
+#PanelUI-menu-button {
+  list-style-image: url("firefox.png") !important;
+  padding-inline-start: 0 !important;
+  /*list-style-image: none !important;
+  background: transparent url("firefox-logo.png") no-repeat center !important;*/
+}
+#nav-bar-overflow-button {
+  list-style-image: url("overflow.svg") !important;
+}
+
+.scrollbutton-up,
+.scrollbutton-down,
+#alltabs-button {
+  display: none;
+}
+
+.tabs-newtab-button .toolbarbutton-icon,
+#new-tab-button .toolbarbutton-icon {
+  width: calc(2 * var(--toolbarbutton-inner-padding) + 12px) !important;
+}
+
+
+/*
+ * Description: Makes the activity stream page look decent with the dark theme.
+ */
+/*.browserContainer {
+  background-color: var(--url-and-searchbar-background-color, hsla(0,0%,100%,.8)) !important;
+}
+#sidebar {
+  background-color: white !important;
+}
+.sidebar-placesTree {
+  background-color: white !important;
+}*/
+
+/*
+ * Only show close buttons on background tabs when hovering with the mouse
+ *
+ * Contributor(s): Timvde
+ */
+.tabbrowser-tab:not([selected]):not([pinned]) .tab-close-button {
+  display: none !important;
+}
+.tabbrowser-tab:not([selected]):not([pinned]):hover .tab-close-button {
+  display: -moz-box !important;
+}
+
+/*
+ * This style will move your tabs to the bottom. Best used with the titlebar enabled.
+ *
+ * Contributor(s): Isaac-Newt
+ */
+/* Tabs On Bottom */
+/*#TabsToolbar {
+  -moz-box-ordinal-group: 2;
+}
+#nav-bar{
+  border-top-width: 0px !important;
+}
+#PersonalToolbar {
+  -moz-box-ordinal-group: 2;
+}8/
+
+/*
+ * Move the hamburger menu to the top left, before the first tab
+ *
+ * Contributor(s): Alex Vallat
+ */
+/*#PanelUI-button {
+  margin-top: 33px;
+  position: absolute;
+  right: 0;
+}
+#TabsToolbar {
+  padding-inline-end: 32px !important;
+}*/
+
+/*
+ * Style your tabs similar to Googles "Material Design" guidelines.
+ *
+ * This includes a transparent background and a white line at the bottom
+ * instead of a blue line at the top.
+ *
+ * Contributor(s): Madis0
+ */
+.tabbrowser-tab::before,
+.tabbrowser-tab::after {
+  background-color: white !important;
+  opacity: 0.25 !important;
+  margin: 6px 0 !important;
+}
+.tabbrowser-tab[visuallyselected="true"] {
+  color: inherit !important; /* Use background tab text color for foreground tabs */
+}
+#tabbrowser-tabs:not([movingtab]) > .tabbrowser-tab[beforeselected-visible]::after, #tabbrowser-tabs[movingtab] > .tabbrowser-tab[visuallyselected]::before, .tabbrowser-tab[visuallyselected]::after {
+}
+.tab-background[selected=true] {
+  background-color: transparent !important; /* Make selected tab bg transparent */
+  background-image: none !important;
+  border: none !important;
+}
+.tab-line {
+  -moz-box-ordinal-group: 2; /* Move the line to the bottom */
+}
+.tab-line[selected=true] {
+  background-color: #42A5F5 !important; /* Make the line white, remove this for default color */
+}
+
+/*
+ * Makes urlbar and many other things sharper on the edges
+ *
+ * Contributor(s): DrPugsley
+ */
+:root {
+  --toolbarbutton-border-radius: 2px !important;
+}
+
+/*
+ * Bookmarks toolbar is visible only on new tab page, just like Chrome.
+ *
+ * Screenshot: https://vimeo.com/235059188
+ * Video: https://vimeo.com/240436456
+ *
+ * Contributor(s): https://www.reddit.com/user/AJtfM7zT4tJdaZsm and Andrei Cristian Petcu
+ *                 https://www.reddit.com/r/FirefoxCSS/comments/7evwow/show_bookmarks_toolbar_only_on_new_tab/
+ */
+/*#main-window #PersonalToolbar {
+  visibility: collapse !important;
+}
+#main-window[title^="about:newtab"] #PersonalToolbar,
+#main-window[title^="New Tab"] #PersonalToolbar,
+#main-window[title^="Nightly"] #PersonalToolbar,
+#main-window[title^="Mozilla Firefox"] #PersonalToolbar,
+#main-window[title^="Firefox Developer Edition"] #PersonalToolbar,
+#main-window[title^="Firefox"] #PersonalToolbar {
+  visibility: visible !important;
+}*/
+
+/*
+ * Remove "Send Page to Device", "Send Link to Device", 
+ * "Send Tab to Device" from context menu.
+ *
+ * Contributor(s): PilzAdam
+ */
+#context-sendpagetodevice, #context-sep-sendpagetodevice,
+#context-sendlinktodevice, #context-sep-sendlinktodevice,
+#context_sendTabToDevice, #context_sendTabToDevice_separator {
+  display: none !important;
+}
+
+/*
+ * Compact findbar at the top of the window
+ *
+ * Contributor(s): Madis0
+ */
+.browserContainer > findbar {
+  -moz-box-ordinal-group: 0;
+  position: fixed !important;
+  right: 2em;
+  border: none !important;
+  border-radius: 0 0 2px 2px !important;
+
+  /* Hide the "border" at the top by removing the box-shadow and background-image */
+  border-top: none !important;
+  background-image: none !important;
+
+  /* Uncomment to add a transition from the top */
+  /*
+  transition: 400ms !important;
+  z-index: 0 !important;
+  */
+}
+/* Margin from top when hidden (necessary for the transition to work) */
+/*findbar[hidden]{ margin-top: -2em !important; }*/
+/* Aligns the close button to the center */
+.findbar-closebutton {
+  margin-inline-start: 0.5em !important;
+  margin-bottom: 0.75em !important;
+}
+
+/*
+ * Automatically hides the info/Firefox icon on the location bar when a website doesn't
+ * have any permissions.
+ *
+ * Contributor(s): Madis0
+ */
+/* Hide info icon for sites that don't have permissions */
+#urlbar :not(.grantedPermissions) #identity-icon {
+        transition: 300ms !important; /* Animate icon hiding */
+	opacity: 0 !important; /* Make icons transparent */
+	-moz-margin-end: -18px !important; /* Hide icons by offsetting them */
+}
+/* Show info icon on navbar hover, except for new tab page search icon */
+#urlbar[pageproxystate="valid"]:hover #identity-icon {
+        transition: 300ms !important; /* Animate icon showing */
+	opacity: 1 !important; /* Make icons opaque */
+	-moz-margin-end: initial !important; /* Use initial margins to show icons */
+}
+
+/*
+ * Automatically hides the reload button until urlbar hover or page load
+ */
+/* Hide the reload button by default */
+#pageAction-urlbar-_e1ed7a80-7c11-4f7e-968b-79b551a0067f_ {
+  transition: 300ms !important; /* Animate icon hiding */
+  opacity: 0 !important; /* Make icon transparent */
+  -moz-margin-end: -26px !important; /* Hide icon by offsetting it */
+}
+/* Show the reload button on navbar hover or page load (animation/stop button) */
+#urlbar:hover #pageAction-urlbar-_e1ed7a80-7c11-4f7e-968b-79b551a0067f_,
+#pageAction-urlbar-_e1ed7a80-7c11-4f7e-968b-79b551a0067f_[aria-label="Stop"] {
+  transition: 300ms !important; /* Animate icon showing */
+  opacity: 1 !important;  /* Make the icon opaque */
+  -moz-margin-end: initial !important; /* Use initial margins to show the icon */
+}
+
+/*
+ * Hides the separator between address bar PageAction extensions and internal icons (Containers, Reader, etc.)
+ */
+#pageActionSeparator{
+  display: none;
+}
+
+/*
+ * Remove circle, background and padding from back button
+ */
+:root:not([uidensity="compact"]) #back-button > .toolbarbutton-icon {
+  background-color: unset !important;
+  border: unset !important;
+  padding: var(--toolbarbutton-inner-padding) !important;
+  border-radius: var(--toolbarbutton-border-radius) !important;
+  width: calc(2 * var(--toolbarbutton-inner-padding) + 16px) !important;
+}
+/* Hover and Active states to mimic other buttons */
+:root:not([uidensity="compact"]) #back-button:hover:not([disabled]) > .toolbarbutton-icon {
+  background-color: var(--toolbarbutton-hover-background) !important;
+}
+:root:not([uidensity="compact"]) #back-button:active:not([disabled]) > .toolbarbutton-icon {
+  background-color: var(--toolbarbutton-active-background) !important;
+}
+/* Remove pre-padding */
+:root:not([uidensity="compact"]) #back-button {
+  padding-inline-start: 3px !important;
+}
+
+/*
+ * Hides the address bar history dropmarker permanently.
+ */
+.urlbar-history-dropmarker{
+  display: none !important;
+}
+
+/*
+ * Hides the labels of _permanent_ overflow menu items, making them show only as icons.
+ */
+#widget-overflow-fixed-list {
+  padding: 0 8px;
+    display: grid; /* Display icons in a grid */
+    grid-template-rows: repeat(1, 28px); /* One row with button width 1.5em */
+    grid-template-columns: repeat(20, 28px); /* Twenty columns with button height 1.5em */
+}
+#widget-overflow-fixed-list .toolbarbutton-1 > .toolbarbutton-text {
+    display: none !important; /* Hide labels just in case */
+}
+
+/*
+ * Hides the website name (when present) from the address bar, keeping only the location abbrevation.
+ */
+#identity-icon-label { /* Hides the EV SSL label */
+  visibility: collapse !important;
+}
+#identity-box:hover > #identity-icon-labels > #identity-icon-label { /* Shows the label on identity box hover */
+  visibility: visible !important;
+}
+
+/*
+ * Removes the "PageAction Button", the 3-dot button near the right of the
+ * urlbar which gives you options such as: "Bookmark this page", "Save page to
+ * pocket", etc.
+ */
+#pageActionButton {
+  display: none !important;
+}
