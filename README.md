@@ -21,5 +21,8 @@
 
 ## Installation
 * **Firefox**
-  
-  Copy the `chrome` folder to `~/.mozilla/firefox/{anything}.default/`.
+  - Addons:
+    - [Minimize Window Button](https://addons.mozilla.org/en-US/firefox/addon/minimize-the-window/)
+    - [Maximize/Restore Window Button](https://addons.mozilla.org/en-US/firefox/addon/maximize-the-window/)
+    - [Close Window Button](https://addons.mozilla.org/en-US/firefox/addon/close-the-window/)
+  - Copy the `chrome` folder to `~/.mozilla/firefox/{anything}.default/`.
