@@ -1,5 +1,8 @@
 if status is-interactive
-  if not functions -q fundle; eval (curl -sfL https://git.io/fundle-install); end
+  if not functions -q fundle
+    # eval (curl -sfL https://git.io/fundle-install)
+    eval (curl -sfL https://raw.githubusercontent.com/danhper/fundle/master/install-fundle.fish)
+  end
 
   starship init fish | source
 end
