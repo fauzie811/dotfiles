@@ -1,3 +1,4 @@
-# fnm
-set PATH /home/fauzie/.fnm $PATH
-fnm env | source
+if test -e ~/.fnm
+  set PATH ~/.fnm $PATH
+  fnm env | source
+end
