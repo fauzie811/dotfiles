@@ -79,6 +79,7 @@ return require('packer').startup(function(use)
     'neovim/nvim-lspconfig',
     'williamboman/nvim-lsp-installer',
   }
+  use 'khaveesh/vim-fish-syntax'
 
   -- Indentation
   use "lukas-reineke/indent-blankline.nvim"
