@@ -10,6 +10,14 @@ else
   echo -e "${GREEN}ok${NC}"
 fi
 
+echo -n 'Installing lsd config... '
+if [ -e ~/.config/lsd ]; then
+  echo -e "${RED}skipped${NC}"
+else
+  ln -s $PWD/.config/lsd ~/.config/lsd
+  echo -e "${GREEN}ok${NC}"
+fi
+
 echo -n 'Installing neovim config... '
 if [ -e ~/.config/nvim ]; then
   echo -e "${RED}skipped${NC}"
