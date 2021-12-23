@@ -2,6 +2,9 @@ local set = vim.opt
 
 set.linebreak = true
 set.encoding = "utf-8"
+set.whichwrap = 'b,s,<,>,[,],h,l'
+set.wrap = false                            -- Display long lines as just one line
+set.linebreak = true
 set.fileencoding = "utf-8"
 set.ruler = true
 set.mouse = "a"
@@ -19,6 +22,12 @@ set.autoindent = true                       -- Good auto indent
 set.number = true
 set.cursorline = true
 set.termguicolors = true
+set.pumheight = 10
+set.updatetime = 300
+set.timeoutlen = 300
+set.scrolloff = 9
+set.showtabline = 2
+set.showmode = false
 
 -- vim.cmd('colorscheme onedark')
 -- require('github-theme').setup({
