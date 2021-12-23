@@ -33,3 +33,23 @@ else
   ln -s $PWD/.config/starship.toml ~/.config/starship.toml
   echo -e "${GREEN}ok${NC}"
 fi
+
+if [ -d ~/.termux ]; then
+  echo -n 'Installing termux font... '
+  if [ -L ~/.termux/font.ttf ]; then
+    echo -e "${RED}skipped${NC}"
+  else
+    rm ~/.termux/font.ttf
+    ln -s $PWD/.termux/font.ttf ~/.termux/font.ttf
+    echo -e "${GREEN}ok${NC}"
+  fi
+
+  echo -n 'Installing termux colors... '
+  if [ -L ~/.termux/colors.properties ]; then
+    echo -e "${RED}skipped${NC}"
+  else
+    rm ~/.termux/colors.properties
+    ln -s $PWD/.termux/colors.properties ~/.termux/colors.properties
+    echo -e "${GREEN}ok${NC}"
+  fi
+fi
