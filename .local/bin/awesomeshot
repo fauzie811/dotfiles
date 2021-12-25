@@ -1,0 +1,220 @@
+#!/usr/bin/env bash
+
+VERSION="0.9.0"
+
+ENABLE_BACKUP=false
+
+BORDER_RADIUS="10"
+SHADOW_COLOR="#000000"
+SHADOW_SIZE="80x10+0+10"
+BORDER_COLOR="#ABB2BF" # Blue Sky: #A8D7FE # Gray: #ABB2BF
+BORDER_SIZE=60
+
+SCREENSHOTS_PATH="/sdcard/Pictures/Screenshots"
+# SCREENSHOTS_PATH="${HOME}/Pictures/Screenshots"
+BACKUP_PATH="${HOME}/.backup/awesomeshot"
+
+LIBS_PATH="${HOME}/.local/share/scripts/libs"
+LIBS=(cursor colors file)
+for LIB in ${LIBS[@]}; do
+  source ${LIBS_PATH}/${LIB}.sh
+done
+
+LOG_PATH="${HOME}/.logs"
+LOG_FILE="${LOG_PATH}/awesomeshot.log"
+
+mkdir -p $LOG_PATH
+
+FILENAME=""
+
+function backupOriginal() {
+  if [ "$ENABLE_BACKUP" = true ]; then
+    title "${COLOR_SKY}[+] BACKUP${COLOR_BASED}"
+    subtitle "[+]*Backup*File*"
+
+    mkdir -p ${BACKUP_PATH}
+
+    BACKUP_FILENAME=$( echo "${1}" | sed -r 's/(.*?)\.(.*?)/\1.backup.\2/g' )
+
+    cp ${FILENAME} ${BACKUP_PATH}/${BACKUP_FILENAME} >> $LOG_FILE 2>&1
+
+    check
+  fi
+}
+
+function rounded() {
+  subtitle "[+]*Set*Rounded*Corner*"
+
+  convert ${FILENAME} \
+    \( +clone -alpha extract -draw \
+      "fill black polygon 0,0,0,${BORDER_RADIUS} ${BORDER_RADIUS},0 fill white circle ${BORDER_RADIUS},${BORDER_RADIUS},${BORDER_RADIUS},0" \
+      \( +clone -flip \) -compose Multiply -composite \
+      \( +clone -flop \) -compose Multiply -composite \
+    \) \
+    -alpha off -compose CopyOpacity -composite ${FILENAME} >> $LOG_FILE 2>&1
+
+  check
+}
+
+function shadow() {
+  subtitle "[+]*Set*Image*Shadow*"
+
+  convert ${FILENAME} \
+    \( \
+      +clone \
+      -background "${SHADOW_COLOR}" \
+      -shadow ${SHADOW_SIZE} \
+    \) \
+    +swap \
+    -background none \
+    -layers merge \
+    +repage ${FILENAME} >> $LOG_FILE 2>&1
+
+  check
+}
+
+function border() {
+  subtitle "[+]*Set*Image*Border*Color*"
+
+  convert ${FILENAME} -bordercolor "${BORDER_COLOR}" -border ${BORDER_SIZE} ${FILENAME} >> $LOG_FILE 2>&1
+
+  check
+}
+
+function header() {
+  printf "\n\n                      %-18s\n\n" "AWESOMESHOT v${VERSION}"
+}
+
+function title() {
+  printf "\n\b\r\033[2K***${1}\n" | sed 's/*/ /g'
+}
+
+function subtitle() {
+  printf "%-45s" "*******${1}" | sed 's/ /./g' | sed 's/*/ /g'
+}
+
+function check() {
+  if [[ $? -eq 0 && ${PIPESTATUS[0]} -eq 0 ]]; then
+    echo -e " ${COLOR_SUCCESS}[SUCCESS]${COLOR_DEFAULT} "
+  else
+    echo -e " ${COLOR_DANGER}[FAILED]${COLOR_DEFAULT} "
+  fi
+}
+
+function autorun() {
+  COUNT=1
+
+  clear
+  header
+
+  title "${COLOR_SKY}[?] WAITING TO TAKE SCREENSHOT${COLOR_BASED}             [${COLOR_WARNING}${COUNT}${COLOR_BASED}]"
+
+  inotifywait -m -e create ${SCREENSHOTS_PATH} 2> /dev/null |
+  while read SCREENSHOT_FILE
+  do
+    sleep 3
+    subtitle "[+]*Execute*Program*"
+
+    GET_FILENAME=$(echo "${SCREENSHOT_FILE}" | awk '{print $3}')
+    FULL_PATH_FILENAME="${SCREENSHOTS_PATH}/${GET_FILENAME}"
+    FILENAME+="${FULL_PATH_FILENAME}"
+
+    echo
+
+    backupOriginal ${GET_FILENAME}
+
+    title "${COLOR_SKY}[+] CONVERTING${COLOR_BASED}"
+
+    rounded
+    shadow
+    border
+
+    openFile ${FILENAME}
+
+    COUNT=$(( ${COUNT} + 1 ))
+
+    title "${COLOR_SKY}[?] WAITING TO TAKE SCREENSHOT${COLOR_BASED}             [${COLOR_WARNING}${COUNT}${COLOR_BASED}]"
+    unset FILENAME
+  done
+}
+
+function manualrun() {
+  clear
+  header
+
+  title "${COLOR_SKY}[?] CHECKING FILE${COLOR_BASED}"
+  subtitle "[+]*File*Exists*"
+
+  if [ -f ${FILENAME} ]; then
+    check
+
+    backupOriginal ${FILENAME}
+
+    title "${COLOR_SKY}[+] CONVERTING${COLOR_BASED}"
+
+    rounded
+    shadow
+    border
+
+    setCursor on
+
+    openFile ${FILENAME}
+  else
+    check 1
+    setCursor on
+    exit 1
+  fi
+}
+
+function version() {
+  echo $VERSION
+}
+
+function help() {
+  echo -e "\
+Usage:
+  awesomeshot [options] [file]
+
+META OPTIONS:
+  -h, --help              show list of command-line options
+  -v, --version           show version of awesomeshot
+
+RUN OPTIONS:
+  -a, --auto              run awesomeshot with automatic while take screenshot
+  -m, --manual            run awesomeshot with manual (${COLOR_WARNING}require filename${COLOR_BASED})"
+}
+
+function main() {
+  trap "setCursor on" 2
+  setCursor off
+  ${1} ${2}
+}
+
+case "${1}" in
+  -a|--auto )
+    main autorun
+  ;;
+
+  -m|--manual )
+    if [ ${2} ]; then
+      FILENAME="${2}"
+      main manualrun
+    else
+      echo -e "${COLOR_DANGER}Filename required.${COLOR_BASED}"
+      help
+      exit 1
+    fi
+  ;;
+
+  -h|--help )
+    help
+  ;;
+
+  -v|--version )
+    version
+  ;;
+
+  * )
+    help
+  ;;
+esac

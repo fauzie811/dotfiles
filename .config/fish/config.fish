@@ -18,6 +18,10 @@ if test -e ~/.fzf.bash
 end
 
 alias ls 'lsd'
+alias tree 'lsd --tree'
+
+alias largefile 'du -hs .* * | sort -rh | head -20'
+
 alias artisan 'php artisan'
 alias art 'php artisan'
 
