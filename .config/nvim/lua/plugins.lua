@@ -3,21 +3,30 @@ local fn = vim.fn
 -- Automatically install packer
 local install_path = fn.stdpath('data')..'/site/pack/packer/start/packer.nvim'
 if fn.empty(fn.glob(install_path)) > 0 then
-  PACKER_BOOTSTRAP = fn.system({'git', 'clone', '--depth', '1', 'https://github.com/wbthomason/packer.nvim', install_path})
+  PACKER_BOOTSTRAP = fn.system {
+    'git',
+    'clone',
+    '--depth',
+    '1',
+    'https://github.com/wbthomason/packer.nvim',
+    install_path
+  }
   print("Installing packer close and reopen Neovim...")
+  vim.cmd [[packadd packer.nvim]]
 end
 
 -- Autocommand that reloads neovim whenever you save the plugins.lua file
 vim.cmd([[
   augroup packer_user_config
     autocmd!
-    autocmd BufWritePost plugins.lua source <afile>
+    autocmd BufWritePost plugins.lua source <afile> | PackerCompile
   augroup end
 ]])
 
 -- Use a protected call so we don't error out on first use
 local status_ok, packer = pcall(require, "packer")
 if not status_ok then
+  print("Error occured when loading packer.nvim")
   return
 end
 
@@ -36,10 +45,6 @@ return require('packer').startup(function(use)
   use 'wbthomason/packer.nvim'
 
   -- Themes & Treesitter
-  use 'NLKNguyen/papercolor-theme'
-  use {
-    'navarasu/onedark.nvim',
-  }
   use {
     "projekt0n/github-nvim-theme",
     after = "lualine.nvim",
@@ -92,6 +97,17 @@ return require('packer').startup(function(use)
     end
   }
 
+
+  -- Dashboard
+  use {
+    'goolord/alpha-nvim',
+    requires = { 'kyazdani42/nvim-web-devicons' },
+    event = "BufWinEnter",
+    config = function ()
+      require('alpha-config')
+    end
+  }
+
   -- LSP
   use {
     'williamboman/nvim-lsp-installer',
@@ -104,12 +120,31 @@ return require('packer').startup(function(use)
     end
   }
 
+  -- LSP Saga
+  use {
+    'tami5/lspsaga.nvim',
+    after = "nvim-lspconfig",
+    config = function ()
+      require('lspsaga')
+    end
+  }
+
   -- Indentation
   use {
     "lukas-reineke/indent-blankline.nvim",
     after = "nvim-treesitter",
     config = function ()
       require('indentation-config')
+    end
+  }
+
+  -- Diagnostic list
+  use {
+    "folke/trouble.nvim",
+    requires = "kyazdani42/nvim-web-devicons",
+    cmd = {"Trouble", "TroubleToggle"},
+    config = function()
+      require("trouble").setup {}
     end
   }
 
@@ -146,6 +181,28 @@ return require('packer').startup(function(use)
     config = function ()
       require('whichkey-config')
     end
+  }
+
+  -- Git
+  use {
+    'lewis6991/gitsigns.nvim',
+    event = "BufWinEnter",
+    requires = {
+      'nvim-lua/plenary.nvim'
+    },
+    tag = 'release',
+    config = function ()
+      require('gitsigns-config')
+    end
+  }
+
+  -- Colorizer
+  use {
+    'norcalli/nvim-colorizer.lua',
+    event = "BufWinEnter",
+    config = function()
+      require'colorizer'.setup()
+    end,
   }
 
   -- Automatically set up your configuration after cloning packer.nvim

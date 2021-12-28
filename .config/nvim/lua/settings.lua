@@ -25,7 +25,7 @@ set.termguicolors = true
 set.pumheight = 10
 set.updatetime = 300
 set.timeoutlen = 300
-set.scrolloff = 9
+set.scrolloff = 5
 set.showtabline = 2
 set.showmode = false
 
