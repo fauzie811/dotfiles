@@ -10,9 +10,9 @@ SHADOW_SIZE="80x10+0+10"
 BORDER_COLOR="#ABB2BF" # Blue Sky: #A8D7FE # Gray: #ABB2BF
 BORDER_SIZE=60
 
-SCREENSHOTS_PATH="/sdcard/Pictures/Screenshots"
-# SCREENSHOTS_PATH="${HOME}/Pictures/Screenshots"
+SCREENSHOTS_PATH="/sdcard/DCIM/Screenshots"
 BACKUP_PATH="${HOME}/.backup/awesomeshot"
+LOG_PATH="${HOME}/.logs"
 
 LIBS_PATH="${HOME}/.local/share/scripts/libs"
 LIBS=(cursor colors file)
@@ -20,7 +20,10 @@ for LIB in ${LIBS[@]}; do
   source ${LIBS_PATH}/${LIB}.sh
 done
 
-LOG_PATH="${HOME}/.logs"
+if [ -e ${HOME}/.config/awesomeshot.sh ]; then
+  source ${HOME}/.config/awesomeshot.sh
+fi
+
 LOG_FILE="${LOG_PATH}/awesomeshot.log"
 
 mkdir -p $LOG_PATH
@@ -37,6 +40,18 @@ function backupOriginal() {
     BACKUP_FILENAME=$( echo "${1}" | sed -r 's/(.*?)\.(.*?)/\1.backup.\2/g' )
 
     cp ${FILENAME} ${BACKUP_PATH}/${BACKUP_FILENAME} >> $LOG_FILE 2>&1
+
+    check
+  fi
+}
+
+function convertToPng() {
+  EXTENSION="${FILENAME##*.}"
+  if [ $EXTENSION != "png" ]; then
+    subtitle "[+]*Convert*to*PNG*"
+
+    convert ${FILENAME} "${FILENAME%.*}.png" >> $LOG_FILE 2>&1
+    FILENAME="${FILENAME%.*}.png"
 
     check
   fi
@@ -81,6 +96,15 @@ function border() {
   check
 }
 
+function processImage() {
+  title "${COLOR_SKY}[+] CONVERTING${COLOR_BASED}"
+
+  convertToPng
+  rounded
+  shadow
+  border
+}
+
 function header() {
   printf "\n\n                      %-18s\n\n" "AWESOMESHOT v${VERSION}"
 }
@@ -123,11 +147,7 @@ function autorun() {
 
     backupOriginal ${GET_FILENAME}
 
-    title "${COLOR_SKY}[+] CONVERTING${COLOR_BASED}"
-
-    rounded
-    shadow
-    border
+    processImage
 
     openFile ${FILENAME}
 
@@ -150,11 +170,7 @@ function manualrun() {
 
     backupOriginal ${FILENAME}
 
-    title "${COLOR_SKY}[+] CONVERTING${COLOR_BASED}"
-
-    rounded
-    shadow
-    border
+    processImage
 
     setCursor on
 
