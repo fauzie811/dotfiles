@@ -29,6 +29,7 @@ LOG_FILE="${LOG_PATH}/awesomeshot.log"
 mkdir -p $LOG_PATH
 
 FILENAME=""
+LAST_FILENAME=""
 
 function backupOriginal() {
   if [ "$ENABLE_BACKUP" = true ]; then
@@ -47,7 +48,7 @@ function backupOriginal() {
 
 function convertToPng() {
   EXTENSION="${FILENAME##*.}"
-  if [ $EXTENSION != "png" ]; then
+  if [[ $EXTENSION != "png" ]]; then
     subtitle "[+]*Convert*to*PNG*"
 
     convert ${FILENAME} "${FILENAME%.*}.png" >> $LOG_FILE 2>&1
@@ -55,6 +56,7 @@ function convertToPng() {
 
     check
   fi
+  LAST_FILENAME=$FILENAME
 }
 
 function rounded() {
@@ -136,25 +138,27 @@ function autorun() {
   inotifywait -m -e create ${SCREENSHOTS_PATH} 2> /dev/null |
   while read SCREENSHOT_FILE
   do
-    sleep 3
-    subtitle "[+]*Execute*Program*"
-
     GET_FILENAME=$(echo "${SCREENSHOT_FILE}" | awk '{print $3}')
     FULL_PATH_FILENAME="${SCREENSHOTS_PATH}/${GET_FILENAME}"
-    FILENAME+="${FULL_PATH_FILENAME}"
+    FILENAME="${FULL_PATH_FILENAME}"
 
-    echo
+    if [[ $FILENAME != $LAST_FILENAME ]]; then
+      sleep 3
+      subtitle "[+]*Execute*Program*"
 
-    backupOriginal ${GET_FILENAME}
+      echo
 
-    processImage
+      backupOriginal ${GET_FILENAME}
 
-    openFile ${FILENAME}
+      processImage
 
-    COUNT=$(( ${COUNT} + 1 ))
+      openFile ${FILENAME}
 
-    title "${COLOR_SKY}[?] WAITING TO TAKE SCREENSHOT${COLOR_BASED}             [${COLOR_WARNING}${COUNT}${COLOR_BASED}]"
-    unset FILENAME
+      COUNT=$(( ${COUNT} + 1 ))
+
+      title "${COLOR_SKY}[?] WAITING TO TAKE SCREENSHOT${COLOR_BASED}             [${COLOR_WARNING}${COUNT}${COLOR_BASED}]"
+      unset FILENAME
+    fi
   done
 }
 
