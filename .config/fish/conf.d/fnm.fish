@@ -1,4 +1,4 @@
-if test -e ~/.fnm
-  set PATH ~/.fnm $PATH
+if test -e $HOME/.fnm
+  set PATH $HOME/.fnm $PATH
   fnm env | source
 end
