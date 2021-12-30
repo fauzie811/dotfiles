@@ -1,46 +1,70 @@
 #!/usr/bin/env bash
 
-VERSION="0.9.0"
+# Configurations
 
 ENABLE_BACKUP=false
 
 BORDER_RADIUS="10"
 SHADOW_COLOR="#000000"
 SHADOW_SIZE="80x10+0+10"
-BORDER_COLOR="#ABB2BF" # Blue Sky: #A8D7FE # Gray: #ABB2BF
+BORDER_COLOR="#A8D7FE"
 BORDER_SIZE=60
 
 SCREENSHOTS_PATH="/sdcard/DCIM/Screenshots"
-BACKUP_PATH="${HOME}/.backup/awesomeshot"
+BACKUP_PATH="${HOME}/.backup/fancyshot"
 LOG_PATH="${HOME}/.logs"
 
-LIBS_PATH="${HOME}/.local/share/scripts/libs"
-LIBS=(cursor colors file)
-for LIB in ${LIBS[@]}; do
-  source ${LIBS_PATH}/${LIB}.sh
-done
-
-if [ -e ${HOME}/.config/awesomeshot.sh ]; then
-  source ${HOME}/.config/awesomeshot.sh
+if [ -e "${HOME}/.config/fancyshot.sh" ]; then
+  source "${HOME}/.config/fancyshot.sh"
 fi
 
-LOG_FILE="${LOG_PATH}/awesomeshot.log"
+# Constants
+
+VERSION="0.9.0"
+
+NOCOLOR="\e[0m"
+BLUE="\e[34m"
+LIGHTRED="\e[91m"
+LIGHTGREEN="\e[92m"
+LIGHTYELLOW="\e[93m"
+
+LOG_FILE="${LOG_PATH}/fancyshot.log"
 
 mkdir -p $LOG_PATH
+
+# Variables
 
 FILENAME=""
 LAST_FILENAME=""
 
+function setCursor() {
+  setterm -cursor ${1}
+}
+
+function openFile() {
+  if [ -x "$(command -v termux-open)" ]; then
+    termux-open ${1}
+  # else
+  #   xdg-open ${1}
+  fi
+}
+
+function scanMedia() {
+  if [ -x "$(command -v termux-scan-media)" ]; then
+    termux-scan-media ${1} >> /dev/null
+  fi
+}
+
 function backupOriginal() {
   if [ "$ENABLE_BACKUP" = true ]; then
-    title "${COLOR_SKY}[+] BACKUP${COLOR_BASED}"
+    title "${BLUE}[+] BACKUP${NOCOLOR}"
     subtitle "[+]*Backup*File*"
 
-    mkdir -p ${BACKUP_PATH}
+    mkdir -p $BACKUP_PATH
 
     BACKUP_FILENAME=$( echo "${1}" | sed -r 's/(.*?)\.(.*?)/\1.backup.\2/g' )
 
-    cp ${FILENAME} ${BACKUP_PATH}/${BACKUP_FILENAME} >> $LOG_FILE 2>&1
+    cp $FILENAME "${BACKUP_PATH}/${BACKUP_FILENAME}" >> $LOG_FILE 2>&1
 
     check
   fi
@@ -51,7 +75,7 @@ function convertToPng() {
   if [[ $EXTENSION != "png" ]]; then
     subtitle "[+]*Convert*to*PNG*"
 
-    convert ${FILENAME} "${FILENAME%.*}.png" >> $LOG_FILE 2>&1
+    convert $FILENAME "${FILENAME%.*}.png" >> $LOG_FILE 2>&1
     FILENAME="${FILENAME%.*}.png"
 
     check
@@ -62,13 +86,13 @@ function convertToPng() {
 function rounded() {
   subtitle "[+]*Set*Rounded*Corner*"
 
-  convert ${FILENAME} \
+  convert $FILENAME \
     \( +clone -alpha extract -draw \
       "fill black polygon 0,0,0,${BORDER_RADIUS} ${BORDER_RADIUS},0 fill white circle ${BORDER_RADIUS},${BORDER_RADIUS},${BORDER_RADIUS},0" \
       \( +clone -flip \) -compose Multiply -composite \
       \( +clone -flop \) -compose Multiply -composite \
     \) \
-    -alpha off -compose CopyOpacity -composite ${FILENAME} >> $LOG_FILE 2>&1
+    -alpha off -compose CopyOpacity -composite $FILENAME >> $LOG_FILE 2>&1
 
   check
 }
@@ -76,7 +100,7 @@ function rounded() {
 function shadow() {
   subtitle "[+]*Set*Image*Shadow*"
 
-  convert ${FILENAME} \
+  convert $FILENAME \
     \( \
       +clone \
       -background "${SHADOW_COLOR}" \
@@ -85,7 +109,7 @@ function shadow() {
     +swap \
     -background none \
     -layers merge \
-    +repage ${FILENAME} >> $LOG_FILE 2>&1
+    +repage $FILENAME >> $LOG_FILE 2>&1
 
   check
 }
@@ -93,13 +117,13 @@ function shadow() {
 function border() {
   subtitle "[+]*Set*Image*Border*Color*"
 
-  convert ${FILENAME} -bordercolor "${BORDER_COLOR}" -border ${BORDER_SIZE} ${FILENAME} >> $LOG_FILE 2>&1
+  convert $FILENAME -bordercolor "${BORDER_COLOR}" -border ${BORDER_SIZE} $FILENAME >> $LOG_FILE 2>&1
 
   check
 }
 
 function processImage() {
-  title "${COLOR_SKY}[+] CONVERTING${COLOR_BASED}"
+  title "${BLUE}[+] CONVERTING${NOCOLOR}"
 
   convertToPng
   rounded
@@ -108,7 +132,7 @@ function processImage() {
 }
 
 function header() {
-  printf "\n\n                      %-18s\n\n" "AWESOMESHOT v${VERSION}"
+  printf "\n\n                      %-18s\n\n" "FancyShot v${VERSION}"
 }
 
 function title() {
@@ -121,9 +145,9 @@ function subtitle() {
 
 function check() {
   if [[ $? -eq 0 && ${PIPESTATUS[0]} -eq 0 ]]; then
-    echo -e " ${COLOR_SUCCESS}[SUCCESS]${COLOR_DEFAULT} "
+    echo -e " ${LIGHTGREEN}[SUCCESS]${NOCOLOR} "
   else
-    echo -e " ${COLOR_DANGER}[FAILED]${COLOR_DEFAULT} "
+    echo -e " ${LIGHTRED}[FAILED]${NOCOLOR} "
   fi
 }
 
@@ -133,14 +157,14 @@ function autorun() {
   clear
   header
 
-  title "${COLOR_SKY}[?] WAITING TO TAKE SCREENSHOT${COLOR_BASED}             [${COLOR_WARNING}${COUNT}${COLOR_BASED}]"
+  title "${BLUE}[?] WAITING TO TAKE SCREENSHOT${NOCOLOR}             [${LIGHTYELLOW}${COUNT}${NOCOLOR}]"
 
-  inotifywait -m -e create ${SCREENSHOTS_PATH} 2> /dev/null |
+  inotifywait -m -e create $SCREENSHOTS_PATH 2> /dev/null |
   while read SCREENSHOT_FILE
   do
     GET_FILENAME=$(echo "${SCREENSHOT_FILE}" | awk '{print $3}')
     FULL_PATH_FILENAME="${SCREENSHOTS_PATH}/${GET_FILENAME}"
-    FILENAME="${FULL_PATH_FILENAME}"
+    FILENAME=$FULL_PATH_FILENAME
 
     if [[ $FILENAME != $LAST_FILENAME ]]; then
       sleep 3
@@ -148,15 +172,16 @@ function autorun() {
 
       echo
 
-      backupOriginal ${GET_FILENAME}
+      backupOriginal $GET_FILENAME
 
       processImage
 
-      openFile ${FILENAME}
+      openFile $FILENAME
+      scanMedia $FILENAME
 
       COUNT=$(( ${COUNT} + 1 ))
 
-      title "${COLOR_SKY}[?] WAITING TO TAKE SCREENSHOT${COLOR_BASED}             [${COLOR_WARNING}${COUNT}${COLOR_BASED}]"
+      title "${BLUE}[?] WAITING TO TAKE SCREENSHOT${NOCOLOR}             [${LIGHTYELLOW}${COUNT}${NOCOLOR}]"
       unset FILENAME
     fi
   done
@@ -166,19 +191,19 @@ function manualrun() {
   clear
   header
 
-  title "${COLOR_SKY}[?] CHECKING FILE${COLOR_BASED}"
+  title "${BLUE}[?] CHECKING FILE${NOCOLOR}"
   subtitle "[+]*File*Exists*"
 
-  if [ -f ${FILENAME} ]; then
+  if [[ -f $FILENAME ]]; then
     check
 
-    backupOriginal ${FILENAME}
+    backupOriginal $FILENAME
 
     processImage
 
     setCursor on
 
-    openFile ${FILENAME}
+    openFile $FILENAME
   else
     check 1
     setCursor on
@@ -193,15 +218,15 @@ function version() {
 function help() {
   echo -e "\
 Usage:
-  awesomeshot [options] [file]
+  fancyshot [options] [file]
 
 META OPTIONS:
   -h, --help              show list of command-line options
-  -v, --version           show version of awesomeshot
+  -v, --version           show version of fancyshot
 
 RUN OPTIONS:
-  -a, --auto              run awesomeshot with automatic while take screenshot
-  -m, --manual            run awesomeshot with manual (${COLOR_WARNING}require filename${COLOR_BASED})"
+  -a, --auto              run fancyshot with automatic while take screenshot
+  -m, --manual            run fancyshot with manual (${LIGHTYELLOW}require filename${NOCOLOR})"
 }
 
 function main() {
@@ -220,7 +245,7 @@ case "${1}" in
       FILENAME="${2}"
       main manualrun
     else
-      echo -e "${COLOR_DANGER}Filename required.${COLOR_BASED}"
+      echo -e "${LIGHTRED}Filename required.${NOCOLOR}"
       help
       exit 1
     fi
